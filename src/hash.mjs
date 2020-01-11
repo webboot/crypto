@@ -1,8 +1,6 @@
 import crypto from 'crypto'
 
-import is from '@magic/types'
-
-export const isValidString = s => typeof s === 'string' && s.length > 0
+import { isValidString } from './lib/index.mjs'
 
 export const create = (str, algorithm = 'sha384') => {
   if (!isValidString(str)) {
