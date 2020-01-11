@@ -20,9 +20,6 @@
     "node": ">=13.5.0"
   },
   "engineString": true,
-  "dependencies": {
-    "@magic/types": "0.1.8"
-  },
   "devDependencies": {
     "@magic/format": "0.0.7",
     "@magic/test": "0.1.30"
