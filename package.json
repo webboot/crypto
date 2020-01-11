@@ -1,0 +1,49 @@
+{
+  "name": "@webboot/crypto",
+  "version": "0.0.1",
+  "author": "Wizards & Witches @ Webboot DAO",
+  "homepage": "https://webboot.github.io/crypto",
+  "license": "AGPL-3.0",
+  "description": "all cryptographic functionality used in @webboot. separated to simplify testing and auditing.",
+  "main": "src/index.mjs",
+  "private": true,
+  "scripts": {
+    "start": "t -p",
+    "test": "t",
+    "format": "f -w",
+    "calls": "calls"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=13.5.0"
+  },
+  "engineString": true,
+  "dependencies": {
+    "@magic/types": "0.1.8"
+  },
+  "devDependencies": {
+    "@magic/format": "0.0.7",
+    "@magic/test": "0.1.30"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webboot/crypto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webboot/crypto/issues"
+  },
+  "keywords": [
+    "webboot",
+    "sri",
+    "subresource",
+    "integriy"
+  ],
+  "contributors": [
+    {
+      "name": "jascha ehrenreich",
+      "github": "jaeh"
+    }
+  ]
+}
