@@ -38,12 +38,14 @@ export const ecdh = (secret, options = {}) => {
     result.priv = priv
   }
 
-  result.computeSecret = pub => {
+  result.computeSecret = (pub, options = {}) => {
+    let { inputEncoding = undefined, outputEncoding = undefined } = options
+
     if (typeof pub === 'string') {
-      pub = Buffer.from(pub)
+      inputEncoding = 'base64'
     }
 
-    return generator.computeSecret(pub)
+    return generator.computeSecret(pub, inputEncoding, outputEncoding)
   }
 
   return result
