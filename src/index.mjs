@@ -1,10 +1,10 @@
 import hashing from './hash.mjs'
-import keying from './keys.mjs'
+import ecdhing from './ecdh.mjs'
 
 export const hash = hashing
-export const keys = keying
+export const ecdh = ecdhing
 
 export default {
   hash,
-  keys,
+  ecdh,
 }

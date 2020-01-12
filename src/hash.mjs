@@ -21,7 +21,7 @@ export const create = (str, algorithm = 'sha384') => {
   }
 }
 
-export const check = (str, hash) => {
+export const check = (str, hash, algorithm = 'sha384') => {
   if (!isValidString(str)) {
     const err = new Error('@webboot/crypto.hashes.check: str was not a string or empty.')
     err.code = 'ESTREMPTY'
@@ -34,7 +34,7 @@ export const check = (str, hash) => {
     throw err
   }
 
-  const result = create(str)
+  const result = create(str, algorithm)
 
   return hash === result.hash
 }

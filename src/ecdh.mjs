@@ -2,12 +2,12 @@ import crypto from 'crypto'
 
 import { isValidString } from './lib/index.mjs'
 
-export const keys = (secret, options = {}) => {
+export const ecdh = (secret, options = {}) => {
   const { encoding = false, curve = 'secp521r1', priv: returnPriv = false } = options
 
   if (!isValidString(secret)) {
     const err = new Error(
-      `@webboot/crypto.keys: secret has to be a string with a length. ${typeof secret}`,
+      `@webboot/crypto.ecdh: secret has to be a string with a length. ${typeof secret}`,
     )
     err.code = 'ENOTASTRING'
     throw err
@@ -15,15 +15,14 @@ export const keys = (secret, options = {}) => {
 
   const generator = crypto.createECDH(curve)
 
-  generator.setPrivateKey(
-    crypto
-      .createHash('sha256')
-      .update(secret, 'utf8')
-      .digest(),
-  )
+  let priv = crypto
+    .createHash('sha256')
+    .update(secret, 'utf8')
+    .digest()
+
+  generator.setPrivateKey(priv)
 
   let pub = generator.getPublicKey()
-  let priv = generator.getPrivateKey()
 
   if (encoding) {
     pub = pub.toString(encoding)
@@ -39,7 +38,15 @@ export const keys = (secret, options = {}) => {
     result.priv = priv
   }
 
+  result.computeSecret = pub => {
+    if (typeof pub === 'string') {
+      pub = Buffer.from(pub)
+    }
+
+    return generator.computeSecret(pub)
+  }
+
   return result
 }
 
-export default keys
+export default ecdh

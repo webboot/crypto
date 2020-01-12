@@ -1,6 +1,6 @@
 import { is } from '@magic/test'
 
-import crypto, { hash, keys } from '../src/index.mjs'
+import crypto, { hash, ecdh } from '../src/index.mjs'
 
 export default [
   { fn: () => crypto, expect: is.obj, info: 'webboot is a function' },
@@ -27,5 +27,5 @@ export default [
   },
   { fn: () => crypto.hash.check, expect: is.fn, info: 'crypto.hash.check is a function' },
 
-  { fn: () => crypto.keys, expect: () => keys, info: 'crypto.keys and crypto.keyPair are equal' },
+  { fn: () => crypto.ecdh, expect: () => ecdh, info: 'crypto.ecdh and ecdh export are equal' },
 ]
