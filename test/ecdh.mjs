@@ -1,8 +1,6 @@
-import crypto from 'crypto'
-
 import { is, tryCatch } from '@magic/test'
 
-import { ecdh } from '../src/index.mjs'
+import crypto, { ecdh } from '../src/index.mjs'
 
 const expectedStrings384 = {
   curve: 'secp384r1',
@@ -19,7 +17,8 @@ const expectedStrings521 = {
 }
 
 const expectedSecret384 = 'Io6Zts7zcgM/m2dKKuKGVuxvEL7M4DtNKMI2xSGt7jx1Mx0KB2g1D2DuvLkC9V92'
-const expectedSecret521 = 'AMzlX0KY0C8VHynGH98PD2Y+hY1GHA0batmsk7iYuNNEFUCsgrPPnie84tg1WBiI8x13ZQHnxep4s+am/Ggx8yUO'
+const expectedSecret521 =
+  'AMzlX0KY0C8VHynGH98PD2Y+hY1GHA0batmsk7iYuNNEFUCsgrPPnie84tg1WBiI8x13ZQHnxep4s+am/Ggx8yUO'
 
 export default [
   { fn: ecdh('testing'), expect: is.object, info: '@webboot/crypto.ecdh returns an object' },
@@ -120,37 +119,5 @@ export default [
     fn: tryCatch(ecdh, 'testing', { curve: 'notACurveAtAll' }),
     expect: is.error,
     info: 'unknown curves throw an error',
-  },
-
-  {
-    fn: () => ecdh('testing').computeSecret,
-    expect: is.fn,
-    info: 'computeSecret is a function',
-  },
-  {
-    fn: tryCatch(ecdh('testing').computeSecret),
-    expect: is.error,
-    info: 'computeSecret needs an argument',
-  },
-  {
-    fn: tryCatch(ecdh('testing').computeSecret),
-    expect: t => t.code === 'ERR_INVALID_ARG_TYPE',
-    info: 'computeSecret needs an argument',
-  },
-  {
-    fn: ecdh('testing').computeSecret(ecdh('testing').pub),
-    expect: is.buffer,
-    info: 'computeSecret works if given a public key as argument',
-  },
-  {
-    fn: ecdh('testing', { curve: 'secp384r1' }).computeSecret(ecdh('testing2', { curve: 'secp384r1' }).pub).toString('base64'),
-    expect: expectedSecret384,
-    info: 'computeSecret works if given a public key as argument',
-  },
-
-  {
-    fn: ecdh('testing').computeSecret(ecdh('testing2').pub).toString('base64'),
-    expect: expectedSecret521,
-    info: 'computeSecret works if given a public key as argument',
   },
 ]
