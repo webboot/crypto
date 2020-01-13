@@ -22,57 +22,63 @@ const createSecrets = () => {
   }
 
   const secret = {
-    alice: gen.alice.computeSecret(gen.bob.pub),
-    bob: gen.bob.computeSecret(gen.alice.pub),
-    eve: gen.eve.computeSecret(gen.lilith.pub),
-    lilith: gen.lilith.computeSecret(gen.eve.pub),
+    alice: gen.alice.secret(gen.bob.pub),
+    bob: gen.bob.secret(gen.alice.pub),
+    eve: gen.eve.secret(gen.lilith.pub),
+    lilith: gen.lilith.secret(gen.eve.pub),
   }
 
   return secret
 }
 
+const createAlice = () => {
+  const alicePriv = crypto.hash.create('Alice Hash Source')
+  const gen = ecdh(alicePriv)
+  return gen
+}
+
 export default [
   {
-    fn: () => ecdh('testing').computeSecret,
+    fn: () => ecdh('testing').secret,
     expect: is.fn,
-    info: 'computeSecret is a function',
+    info: 'secret is a function',
   },
   {
-    fn: tryCatch(ecdh('testing').computeSecret),
+    fn: tryCatch(ecdh('testing').secret),
     expect: is.error,
-    info: 'computeSecret needs an argument',
+    info: 'secret needs an argument',
   },
   {
-    fn: tryCatch(ecdh('testing').computeSecret),
-    expect: t => t.code === 'ERR_INVALID_ARG_TYPE',
-    info: 'computeSecret needs an argument',
+    fn: tryCatch(ecdh('testing').secret),
+    expect: t => t.code === 'EPUBEMPTY',
+    info: 'secret needs an argument',
   },
   {
-    fn: ecdh('testing').computeSecret(ecdh('testing').pub),
+    fn: ecdh('testing').secret(ecdh('testing').pub),
     expect: is.buffer,
-    info: 'computeSecret works if given a public key as argument',
+    info: 'secret works if given a public key as argument',
   },
   {
     fn: ecdh('testing', { curve: 'secp384r1' })
-      .computeSecret(ecdh('testing2', { curve: 'secp384r1' }).pub)
+      .secret(ecdh('testing2', { curve: 'secp384r1' }).pub)
       .toString('base64'),
     expect: expectedSecret384,
-    info: 'computeSecret works if given a public key as argument',
+    info: 'secret works if given a public key as argument',
   },
 
   {
     fn: ecdh('testing')
-      .computeSecret(ecdh('testing2').pub)
+      .secret(ecdh('testing2').pub)
       .toString('base64'),
     expect: expectedSecret521,
-    info: 'computeSecret works if given a public key as argument',
+    info: 'secret works if given a public key as argument',
   },
   {
     fn: ecdh('testing')
-      .computeSecret(ecdh('testing2').pub.toString('base64'))
+      .secret(ecdh('testing2').pub.toString('base64'))
       .toString('base64'),
     expect: expectedSecret521,
-    info: 'computeSecret works if given a string as secret',
+    info: 'secret works if given a string as secret',
   },
 
   {
