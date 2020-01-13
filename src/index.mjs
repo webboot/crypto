@@ -1,8 +1,8 @@
-import hashing from './hash.mjs'
-import ecdhing from './ecdh.mjs'
+import sha from './hash.mjs'
+import diffie from './ecdh/index.mjs'
 
-export const hash = hashing
-export const ecdh = ecdhing
+export const hash = sha
+export const ecdh = diffie
 
 export default {
   hash,
