@@ -1,1 +1,2 @@
-export { isValidString } from './isValidString.mjs'
+export { is } from './is.mjs'
+export { error } from './error.mjs'
