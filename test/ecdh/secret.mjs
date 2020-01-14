@@ -50,7 +50,7 @@ export default [
   },
   {
     fn: tryCatch(ecdh('testing').secret),
-    expect: t => t.code === 'EPUBEMPTY',
+    expect: t => t.name === 'E_PUB_EMPTY',
     info: 'secret needs an argument',
   },
   {
