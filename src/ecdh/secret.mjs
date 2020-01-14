@@ -5,10 +5,7 @@ const libName = '@webboot/crypto.ecdh.secret'
 
 export const secret = generator => (pub, options = {}) => {
   if (is.empty(pub)) {
-    throw error({
-      msg: `${libName}: pub has to be a public key with a length. ${typeof pub}`,
-      code: 'EPUBEMPTY',
-    })
+    throw error(`${libName}: pub has to be non empty. ${typeof pub}`, 'E_PUB_EMPTY')
   }
 
   const { outputEncoding = undefined } = options

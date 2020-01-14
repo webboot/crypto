@@ -12,10 +12,7 @@ export const ecdh = (data, options = {}) => {
   const { encoding = false, curve = 'secp521r1', priv: returnPriv = false, aad } = options
 
   if (!is.string(data) || is.empty(data)) {
-    throw error({
-      msg: `${libName}: data has to be a string with a length. ${typeof data}`,
-      code: 'ENOTASTRING',
-    })
+    throw error(`${libName}: data has to be a string with a length. ${typeof data}`, 'E_NOT_A_STRING')
   }
 
   const generator = crypto.createECDH(curve)
@@ -44,7 +41,7 @@ export const ecdh = (data, options = {}) => {
     },
     signature: {
       ...signature,
-      sign: signature.sign(priv),
+      sign: signature.sign({ priv }),
     },
   }
 

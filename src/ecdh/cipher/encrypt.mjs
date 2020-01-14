@@ -1,49 +1,56 @@
 import crypto from 'crypto'
 
-import { is } from '../../lib/index.mjs'
+import { is, error } from '../../lib/index.mjs'
 
 const libName = '@webboot/crypto.ecdh.'
 
-export const encrypt = ({ aad = false, secret = '' }) => {
-  if (!secret || !secret.length) {
-    throw error({
-      msg: `${libName}.encrypt: secret was not specified`,
-      code: 'ENOSECRET',
-    })
+export const encrypt = ({ aad = false,  secret = '' }) => {
+  if (is.empty(secret)) {
+    throw error(
+      `${libName}createCipher: need props.secret to be a non-empty string or buffer`,
+      'E_SECRET_EMPTY',
+    )
   }
 
-  return props => {
-    const { text } = props
-
-    const nonce = crypto.randomBytes(12)
-
-    if (!is.string(text) || is.empty(text)) {
-      throw error({
-        msg: `${libName}createCipher: need props.text to be a string with a length`,
-        code: 'ETEXTNOSTRING',
-      })
+  return ({ data, algorithm = 'aes-256-cbc' }) => {
+    if (is.empty(data)) {
+      throw error(
+        `${libName}createCipher: need props.data to be a non-empty string or buffer.`,
+        'E_DATA_EMPTY',
+      )
     }
 
-    const cipher = crypto.createCipheriv('aes-192-ccm', secret, nonce, {
-      authTagLength: 16,
-    })
+    const options = {}
 
     if (aad) {
-      if (isValidString(aad)) {
-        aad = Buffer.from(aad, 'hex')
-      }
+      algorithm = 'aes-256-ccm'
+      options.authTagLength = 16
+    }
 
+    const nonce = crypto.randomBytes(16)
+
+    const cipher = crypto.createCipheriv(algorithm, secret, nonce, options)
+
+    if (aad) {
       cipher.setAAD(aad, {
-        plaintextLength: Buffer.byteLength(plaintext),
+        plaintextLength: Buffer.byteLength(data),
       })
     }
 
-    const ciphertext = cipher.update(plaintext, 'utf8')
-    cipher.final()
+    let ciphertext = cipher.update(data, 'utf8')
+    ciphertext += cipher.final('base64')
 
-    const tag = cipher.getAuthTag()
+    const result = {
+      algorithm,
+      ciphertext,
+      nonce,
+    }
 
-    return { ciphertext, nonce, tag }
+    if (aad) {
+      result.tag = cipher.getAuthTag()
+    }
+
+    return result
   }
 }
 
