@@ -7,12 +7,16 @@ const libName = '@webboot/crypto.hashes'
 export const create = (data, options = {}) => {
   const { algorithm = 'sha384', length = 24 } = options
 
+  if (is.string(data)) {
+    data = Buffer.from(data)
+  }
+
   if (is.empty(data)) {
     throw error(`${libName}.create: data can not be empty.`, 'E_DATA_EMPTY')
   }
 
-  if (!is.string(data) && !is.buffer(data)) {
-    throw error(`${libName}.create: data must be a string or buffer.`, 'E_DATA_TYPE')
+  if (!is.buffer(data)) {
+    throw error(`${libName}.create: data must be a buffer.`, 'E_DATA_TYPE')
   }
 
   const opts = {}
