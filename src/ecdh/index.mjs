@@ -8,7 +8,7 @@ import * as cipher from './cipher/index.mjs'
 const libName = '@webboot/crypto.ecdh'
 
 export const ecdh = (data, options = {}) => {
-  const { encoding = false, curve = 'secp521r1', priv: returnPriv = false, aad } = options
+  const { encoding = false, curve = 'secp521r1', priv: returnPriv = false } = options
 
   if (!is.string(data)) {
     throw error(`${libName}: data has to be a string. ${typeof data}`, 'E_DATA_WRONG_TYPE')
@@ -38,10 +38,7 @@ export const ecdh = (data, options = {}) => {
     pub,
     curve,
     secret: secret(generator),
-    cipher: {
-      ...cipher,
-      encrypt: cipher.encrypt({ aad, secret: priv }),
-    },
+    cipher,
   }
 
   if (returnPriv) {
