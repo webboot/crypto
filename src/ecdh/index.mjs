@@ -3,7 +3,6 @@ import crypto from 'crypto'
 import { is, error } from '../lib/index.mjs'
 
 import { secret } from './secret.mjs'
-import * as signature from './signature/index.mjs'
 import * as cipher from './cipher/index.mjs'
 
 const libName = '@webboot/crypto.ecdh'
@@ -11,8 +10,12 @@ const libName = '@webboot/crypto.ecdh'
 export const ecdh = (data, options = {}) => {
   const { encoding = false, curve = 'secp521r1', priv: returnPriv = false, aad } = options
 
-  if (!is.string(data) || is.empty(data)) {
-    throw error(`${libName}: data has to be a string with a length. ${typeof data}`, 'E_NOT_A_STRING')
+  if (!is.string(data)) {
+    throw error(`${libName}: data has to be a string. ${typeof data}`, 'E_DATA_WRONG_TYPE')
+  }
+
+  if (is.empty(data)) {
+    throw error(`${libName}: data has to have a length.`, 'E_DATA_EMPTY')
   }
 
   const generator = crypto.createECDH(curve)
@@ -38,10 +41,6 @@ export const ecdh = (data, options = {}) => {
     cipher: {
       ...cipher,
       encrypt: cipher.encrypt({ aad, secret: priv }),
-    },
-    signature: {
-      ...signature,
-      sign: signature.sign({ priv }),
     },
   }
 
