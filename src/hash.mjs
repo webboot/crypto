@@ -4,17 +4,14 @@ import { is, error } from './lib/index.mjs'
 
 const libName = '@webboot/crypto.hashes'
 
-export const create = (str, algorithm = 'sha384') => {
-  if (!is.string(str) || is.empty(str)) {
-    throw error({
-      msg: `${libName}.create: str was not a string or empty. ${typeof str}`,
-      code: 'ESTREMPTY',
-    })
+export const create = (data, algorithm = 'sha384') => {
+  if (!is.string(data) || is.empty(data)) {
+    throw error(`${libName}.create: data was not a string or empty. ${typeof data}`, 'E_DATA_EMPTY')
   }
 
   const hashIt = crypto.createHash(algorithm)
 
-  hashIt.update(str)
+  hashIt.update(data)
 
   const hash = hashIt.digest('base64')
 
@@ -24,22 +21,16 @@ export const create = (str, algorithm = 'sha384') => {
   }
 }
 
-export const check = (str, hash, algorithm = 'sha384') => {
-  if (!is.string(str) || is.empty(str)) {
-    throw error({
-      msg: `${libName}.check: str was not a string or empty.`,
-      code: 'ESTREMPTY',
-    })
+export const check = (data, hash, algorithm = 'sha384') => {
+  if (!is.string(data) || is.empty(data)) {
+    throw error(`${libName}.check: data was not a string or empty.`, 'E_DATA_EMPTY')
   }
 
   if (!is.string(hash) || is.empty(hash)) {
-    throw error({
-      msg: `${libName}.check: hash was not a string or empty.`,
-      code: 'EHASHEMPTY',
-    })
+    throw error(`${libName}.check: hash was not a string or empty.`, 'E_HASH_EMPTY')
   }
 
-  const result = create(str, algorithm)
+  const result = create(data, algorithm)
 
   return hash === result.hash
 }
