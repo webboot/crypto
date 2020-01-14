@@ -4,7 +4,9 @@ import { is, error } from '../../lib/index.mjs'
 
 const libName = `@webboot/crypto.ecdh.cipher.decrypt`
 
-export const decrypt = ({ aad, nonce, tag, ciphertext, secret, algorithm = 'aes-256-cbc' }) => {
+export const decrypt = (props = {}) => {
+  const { aad, nonce, tag, ciphertext, secret, algorithm = 'aes-256-cbc' } = props
+
   if (is.empty(ciphertext)) {
     throw error(`${libName}: ciphertext was empty.`, 'E_NO_CIPHERTEXT')
   }
@@ -15,6 +17,11 @@ export const decrypt = ({ aad, nonce, tag, ciphertext, secret, algorithm = 'aes-
 
   if (is.empty(nonce)) {
     throw error(`${libName}: nonce was empty`, 'E_NO_NONCE')
+  }
+
+  if (secret.length !== '32') {
+    const hashed = hash.create(secret, { algorithm: 'shake256' })
+    secret = hashed.hash
   }
 
   let options = {}
