@@ -10,7 +10,7 @@ const expectedHash = {
 export default [
   {
     fn: crypto.hash.create('testing'),
-    expect: hash.create('testing'),
+    expect: hash.create(Buffer.from('testing')),
     info: 'both hash exports return the same hash',
   },
   {
@@ -36,7 +36,7 @@ export default [
     info: 'create: omitting the data throws E_DATA_TYPE',
   },
   {
-    fn: hash.create('string', { algorithm: 'shake256', length: 32 }).hash,
+    fn: hash.create('kinda long input string longer than 44 characers.', { algorithm: 'shake256', length: 32 }).hash,
     expect: is.length.eq(44),
     info: 'create: length can be specified',
   },
