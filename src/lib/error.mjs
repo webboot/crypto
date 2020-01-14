@@ -5,7 +5,7 @@ export const error = (msg, name = 'E_UNKNOWN') => {
   err.name = name
 
   // clean stack
-  // remove name, message and first line of stack (which is this file)
+  // remove name, message, and first line of stack (which is this file)
   err.stack = err.stack
     .replace(err.name, '')
     .replace(error.message, '')
