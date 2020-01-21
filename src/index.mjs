@@ -1,5 +1,5 @@
 import diffie from './ecdh/index.mjs'
-import * as pgpgp from './gpg.mjs'
+import pgpgp from './gpg.mjs'
 import hasher from './hash.mjs'
 
 export const hash = hasher
