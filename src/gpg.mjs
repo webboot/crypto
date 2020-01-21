@@ -31,8 +31,6 @@ gpg.parseKeys = string => {
   const keys = {}
   let currentKey = ''
 
-  console.log({ string })
-
   string.split('\n').map((line, i, lines) => {
     line = line.trim()
     if (!line) {
