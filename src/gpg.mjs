@@ -24,15 +24,17 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
       }
 
       let result = stdout.trim()
-      if (options.parse) {
-        result = gpg.parseKeys(result)
+      if (options.parse === true) {
+        result = parseKeys(result)
+      } else if (typeof options.parse === 'function') {
+        result = options.parse(result)
       }
 
       resolve(result)
     })
   })
 
-gpg.parseKeys = string => {
+const parseKeys = string => {
   const keys = {}
   let currentKey = ''
 
@@ -74,6 +76,8 @@ gpg.parseKeys = string => {
 
   return keys
 }
+
+gpg.parseKeys = parseKeys
 
 export const pgp = gpg
 
