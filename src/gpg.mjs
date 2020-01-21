@@ -13,14 +13,19 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
     }
 
     child_process.exec(cmd, options, (err, stdout, stderr) => {
-      let result = stdout.trim()
-
       if (err) {
-        result = error(`${libName}: ${cmd} error: ${err.message}`, 'E_EXEC_ERR')
+        resolve(error(`${libName}: ${cmd} error: ${err.message}`, 'E_EXEC_ERR'))
+        return
       }
 
       if (stderr) {
-        result = error(`${libName}: ${cmd} error: ${stderr}`, 'E_EXEC_STDERR')
+        resolve(error(`${libName}: ${cmd} error: ${stderr}`, 'E_EXEC_STDERR'))
+        return
+      }
+
+      let result = stdout.trim()
+      if (options.parse) {
+        result = gpg.parseKeys(result)
       }
 
       resolve(result)
