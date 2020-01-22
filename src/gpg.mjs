@@ -13,13 +13,9 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
     }
 
     child_process.exec(cmd, options, (err, stdout, stderr) => {
-      if (err) {
-        resolve(error(`${libName}: ${cmd} error: ${err.message}`, 'E_EXEC_ERR'))
-        return
-      }
-
-      if (stderr) {
-        resolve(error(`${libName}: ${cmd} error: ${stderr}`, 'E_EXEC_STDERR'))
+      const e = stderr || err && err.message
+      if (e) {
+        resolve(error(`${libName}: ${cmd} error: ${e}`, 'E_EXEC_ERR'))
         return
       }
 
@@ -48,7 +44,18 @@ const parseKeys = string => {
       // new key
       currentKey = lines[i + 1].trim()
 
-      const [_, algorithm, date, cap, _1, expires] = line.split(' ').filter(a => a)
+      const [_, algorithm, date, capabilities, _1, expires] = line.split(' ').filter(a => a)
+
+      const capabilityMap =  {
+        S: 'Sign',
+        C: 'Certify',
+        E: 'Encrypt',
+        A: 'Authenticate',
+      }
+
+      const cap = capabilities.substr(1, -1)
+        .split('')
+        .map(a => capabilityMap[a])
 
       keys[currentKey] = {
         algorithm,
@@ -65,7 +72,9 @@ const parseKeys = string => {
         .trim()
         .split(']')
         .filter(a => a)
+
       const [name, email] = rest.split(' <')
+
       keys[currentKey].users.push({
         name: name.trim(),
         cap: cap.replace('[', '').trim(),
