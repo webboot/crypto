@@ -1,6 +1,6 @@
 import { is } from '@magic/test'
 
-import crypto, { hash, ecdh } from '../src/index.mjs'
+import crypto, { hash, ecdh, wordlist } from '../src/index.mjs'
 
 export default [
   { fn: () => crypto, expect: is.obj, info: 'webboot is a function' },
@@ -28,4 +28,5 @@ export default [
   { fn: () => crypto.hash.check, expect: is.fn, info: 'crypto.hash.check is a function' },
 
   { fn: () => crypto.ecdh, expect: () => ecdh, info: 'crypto.ecdh and ecdh export are equal' },
+  { fn: wordlist.length, expect: 7777, info: 'more than 7000 words' },
 ]
