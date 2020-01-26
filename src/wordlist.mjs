@@ -7611,6 +7611,7 @@ export default [
   'waviness',
   'waving',
   'wavy',
+  'webboot',
   'whacking',
   'whacky',
   'wham',
