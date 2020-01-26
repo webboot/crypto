@@ -1,4 +1,4 @@
-export const wordlist = [
+export default [
   'abacus',
   'abdomen',
   'abdominal',
