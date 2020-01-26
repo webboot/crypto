@@ -1,18 +1,15 @@
-import diffie from './ecdh/index.mjs'
-import pgpgp from './gpg.mjs'
-import hasher from './hash.mjs'
-import wordList from './wordlist.mjs'
+import ecdh from './ecdh/index.mjs'
+import gpg from './gpg.mjs'
+import hash from './hash.mjs'
 
-export const hash = hasher
-export const ecdh = diffie
-export const gpg = pgpgp
-export const pgp = pgpgp
-export const wordlist = wordList
+import * as random from './random/index.mjs'
+import wordlist from './wordlist.mjs'
 
 export default {
   hash,
   ecdh,
   gpg,
-  pgp,
+  pgp: gpg,
+  random,
   wordlist,
 }
