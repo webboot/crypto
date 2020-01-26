@@ -1,6 +1,6 @@
 import { is, tryCatch } from '@magic/test'
 
-import crypto, { ecdh } from '../../src/index.mjs'
+import crypto from '../../src/index.mjs'
 
 const expectedSecret384 = 'Io6Zts7zcgM/m2dKKuKGVuxvEL7M4DtNKMI2xSGt7jx1Mx0KB2g1D2DuvLkC9V92'
 const expectedSecret521 =
@@ -15,10 +15,10 @@ const createSecrets = () => {
   }
 
   const gen = {
-    alice: ecdh(priv.alice.hash),
-    bob: ecdh(priv.bob.hash),
-    eve: ecdh(priv.eve.hash),
-    lilith: ecdh(priv.lilith.hash),
+    alice: crypto.ecdh(priv.alice.hash),
+    bob: crypto.ecdh(priv.bob.hash),
+    eve: crypto.ecdh(priv.eve.hash),
+    lilith: crypto.ecdh(priv.lilith.hash),
   }
 
   const secret = {
@@ -33,49 +33,49 @@ const createSecrets = () => {
 
 const createAlice = () => {
   const alicePriv = crypto.hash.create('Alice Hash Source')
-  const gen = ecdh(alicePriv)
+  const gen = crypto.ecdh(alicePriv)
   return gen
 }
 
 export default [
   {
-    fn: () => ecdh('testing').secret,
+    fn: () => crypto.ecdh('testing').secret,
     expect: is.fn,
     info: 'secret is a function',
   },
   {
-    fn: tryCatch(ecdh('testing').secret),
+    fn: tryCatch(crypto.ecdh('testing').secret),
     expect: is.error,
     info: 'secret needs an argument',
   },
   {
-    fn: tryCatch(ecdh('testing').secret),
+    fn: tryCatch(crypto.ecdh('testing').secret),
     expect: t => t.name === 'E_PUB_EMPTY',
     info: 'secret needs an argument',
   },
   {
-    fn: ecdh('testing').secret(ecdh('testing').pub),
+    fn: crypto.ecdh('testing').secret(crypto.ecdh('testing').pub),
     expect: is.buffer,
     info: 'secret works if given a public key as argument',
   },
   {
-    fn: ecdh('testing', { curve: 'secp384r1' })
-      .secret(ecdh('testing2', { curve: 'secp384r1' }).pub)
+    fn: crypto.ecdh('testing', { curve: 'secp384r1' })
+      .secret(crypto.ecdh('testing2', { curve: 'secp384r1' }).pub)
       .toString('base64'),
     expect: expectedSecret384,
     info: 'secret works if given a public key as argument',
   },
 
   {
-    fn: ecdh('testing')
-      .secret(ecdh('testing2').pub)
+    fn: crypto.ecdh('testing')
+      .secret(crypto.ecdh('testing2').pub)
       .toString('base64'),
     expect: expectedSecret521,
     info: 'secret works if given a public key as argument',
   },
   {
-    fn: ecdh('testing')
-      .secret(ecdh('testing2').pub.toString('base64'))
+    fn: crypto.ecdh('testing')
+      .secret(crypto.ecdh('testing2').pub.toString('base64'))
       .toString('base64'),
     expect: expectedSecret521,
     info: 'secret works if given a string as secret',

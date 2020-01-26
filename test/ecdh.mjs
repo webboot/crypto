@@ -1,6 +1,6 @@
 import { is, tryCatch } from '@magic/test'
 
-import crypto, { ecdh } from '../src/index.mjs'
+import crypto from '../src/index.mjs'
 
 const expectedStrings384 = {
   curve: 'secp384r1',
@@ -21,102 +21,101 @@ const expectedSecret521 =
   'AMzlX0KY0C8VHynGH98PD2Y+hY1GHA0batmsk7iYuNNEFUCsgrPPnie84tg1WBiI8x13ZQHnxep4s+am/Ggx8yUO'
 
 export default [
-  { fn: ecdh('testing'), expect: is.object, info: '@webboot/crypto.ecdh returns an object' },
+  { fn: crypto.ecdh('testing'), expect: is.object, info: '@webboot/crypto.ecdh returns an object' },
   {
-    fn: ecdh('testing', { priv: true }).priv,
+    fn: crypto.ecdh('testing', { priv: true }).priv,
     expect: is.buffer,
     info: '@webboot/crypto.ecdh .priv is a buffer',
   },
   {
-    fn: ecdh('testing').priv,
+    fn: crypto.ecdh('testing').priv,
     expect: is.undefined,
     info: '@webboot/crypto.ecdh .priv is undefined by default',
   },
-  { fn: ecdh('testing').pub, expect: is.buffer, info: '@webboot/crypto.ecdh .pub is a buffer' },
+  { fn: crypto.ecdh('testing').pub, expect: is.buffer, info: '@webboot/crypto.ecdh .pub is a buffer' },
   {
-    fn: ecdh('testing', { encoding: 'base64', priv: true }).priv,
+    fn: crypto.ecdh('testing', { encoding: 'base64', priv: true }).priv,
     expect: is.string,
     info: '@webboot/crypto.ecdh .priv is a string if requested',
   },
   {
-    fn: ecdh('testing', { encoding: 'base64', priv: true }).pub,
+    fn: crypto.ecdh('testing', { encoding: 'base64', priv: true }).pub,
     expect: is.string,
     info: '@webboot/crypto.ecdh .pub is a string if requested',
   },
   {
-    fn: ecdh('testing').priv,
+    fn: crypto.ecdh('testing').priv,
     expect: undefined,
     info: '@webboot/crypto.ecdh does not return priv key without priv option',
   },
   {
-    fn: tryCatch(ecdh),
+    fn: tryCatch(crypto.ecdh),
     expect: is.error,
     info: '@webboot/crypto.ecdh without arguments errors',
   },
   {
-    fn: tryCatch(ecdh, 1),
+    fn: tryCatch(crypto.ecdh, 1),
     expect: is.error,
     info: '@webboot/crypto.ecdh with number as first argument errors',
   },
   {
-    fn: tryCatch(ecdh, () => {}),
+    fn: tryCatch(crypto.ecdh, () => {}),
     expect: is.error,
     info: '@webboot/crypto.ecdh with function as first argument errors',
   },
-
   {
-    fn: tryCatch(ecdh, ''),
+    fn: tryCatch(crypto.ecdh, ''),
     expect: is.error,
     info: '@webboot/crypto.ecdh with empty string as first argument errors',
   },
 
   // returned strings
   {
-    fn: ecdh('testing', { encoding: 'base64', curve: 'secp384r1' }).pub,
+    fn: crypto.ecdh('testing', { encoding: 'base64', curve: 'secp384r1' }).pub,
     expect: expectedStrings384.pub,
     info: '@webboot/crypto.ecdh returned 384 .pub equals expectedStrings.pub',
   },
   {
-    fn: ecdh('testing', { encoding: 'base64', curve: 'secp384r1', priv: true }).priv,
+    fn: crypto.ecdh('testing', { encoding: 'base64', curve: 'secp384r1', priv: true }).priv,
     expect: expectedStrings384.priv,
     info: '@webboot/crypto.ecdh returned 384 .priv equals expectedStrings.priv',
   },
   {
-    fn: ecdh('testing', { encoding: 'base64' }).pub,
+    fn: crypto.ecdh('testing', { encoding: 'base64' }).pub,
     expect: expectedStrings521.pub,
     info: '@webboot/crypto.ecdh returned 521 .pub equals expectedStrings.pub',
   },
   {
-    fn: ecdh('testing', { encoding: 'base64', priv: true }).priv,
+    fn: crypto.ecdh('testing', { encoding: 'base64', priv: true }).priv,
     expect: expectedStrings521.priv,
     info: '@webboot/crypto.ecdh returned 521 .priv equals expectedStrings.priv',
   },
 
   // returned buffers
   {
-    fn: ecdh('testing', { curve: 'secp384r1' }).pub,
+    fn: crypto.ecdh('testing', { curve: 'secp384r1' }).pub,
     expect: () => Buffer.from(expectedStrings384.pub, 'base64'),
     info: '@webboot/crypto.ecdh curve 384 key pub buffers match',
   },
   {
-    fn: ecdh('testing').pub,
+    fn: crypto.ecdh('testing').pub,
     expect: Buffer.from(expectedStrings521.pub, 'base64'),
     info: '@webboot/crypto.ecdh curve 521 key pub buffers match',
   },
 
   // returned curves
   {
-    fn: ecdh('testing').curve,
+    fn: crypto.ecdh('testing').curve,
     expect: 'secp521r1',
     info: 'default curve is secp521r1',
   },
   {
-    fn: ecdh('testing', { curve: 'secp384r1' }).curve,
+    fn: crypto.ecdh('testing', { curve: 'secp384r1' }).curve,
     expect: 'secp384r1',
     info: 'curve secp384r1 can be used',
   },
   {
-    fn: tryCatch(ecdh, 'testing', { curve: 'notACurveAtAll' }),
+    fn: tryCatch(crypto.ecdh, 'testing', { curve: 'notACurveAtAll' }),
     expect: is.error,
     info: 'unknown curves throw an error',
   },
