@@ -13,7 +13,7 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
     }
 
     child_process.exec(cmd, options, (err, stdout, stderr) => {
-      const e = stderr || err && err.message
+      const e = stderr || (err && err.message)
       if (e) {
         resolve(error(`${libName}: ${cmd} error: ${e}`, 'E_EXEC_ERR'))
         return
@@ -46,14 +46,15 @@ const parseKeys = string => {
 
       const [_, algorithm, date, capabilities, _1, expires] = line.split(' ').filter(a => a)
 
-      const capabilityMap =  {
+      const capabilityMap = {
         S: 'Sign',
         C: 'Certify',
         E: 'Encrypt',
         A: 'Authenticate',
       }
 
-      const cap = capabilities.substr(1, -1)
+      const cap = capabilities
+        .substr(1, -1)
         .split('')
         .map(a => capabilityMap[a])
 
