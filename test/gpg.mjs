@@ -33,7 +33,7 @@ export default [
   },
   {
     fn: gpg('--list-keys', { parse: true }),
-    expect: t => is.string(Object.values(t)[0].algorithm),
+    expect: t => is.empty(t) || is.string(Object.values(t)[0].algorithm),
     info: 'gpg can parse keys before returning them and get the algorithm',
   },
   {
@@ -49,7 +49,7 @@ export default [
   },
   {
     fn: gpg('--list-keys', { parse: true }),
-    expect: t => is.array(Object.values(t)[0].users),
+    expect: t => is.empty(t) || is.array(Object.values(t)[0].users),
     info: 'gpg can parse keys before returning them and get the users',
   },
   {
