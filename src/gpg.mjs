@@ -1,13 +1,12 @@
 import child_process from 'child_process'
+import path from 'path'
 
 import { error } from './lib/error.mjs'
 
-const libName = '@webboot/crypto.lib.exec'
+const libName = '@webboot/crypto.lib.gpg'
 
-// this always resolves.
-// errors get handled if they get returned by awaited functions.
 export const gpg = (cmd = '--list-keys', options = {}) =>
-  new Promise(resolve => {
+  new Promise((resolve, reject) => {
     if (!cmd.startsWith('gpg')) {
       cmd = `gpg ${cmd}`
     }
@@ -15,13 +14,13 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
     child_process.exec(cmd, options, (err, stdout, stderr) => {
       const e = stderr || (err && err.message)
       if (e) {
-        resolve(error(`${libName}: ${cmd} error: ${e}`, 'E_EXEC_ERR'))
+        reject(error(`${libName}: ${cmd} error: ${e}`, 'E_EXEC_ERR'))
         return
       }
 
       let result = stdout.trim()
       if (options.parse === true) {
-        result = parseKeys(result)
+        result = gpg.parseKeys(result)
       } else if (typeof options.parse === 'function') {
         result = options.parse(result)
       }
@@ -30,7 +29,7 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
     })
   })
 
-const parseKeys = string => {
+gpg.parseKeys = string => {
   const keys = {}
   let currentKey = ''
 
@@ -87,7 +86,59 @@ const parseKeys = string => {
   return keys
 }
 
-gpg.parseKeys = parseKeys
+
+gpg.sign = async (key, recipient, message) => new Promise((resolve, reject) => {
+  const signer = child_process.spawn('gpg', ['--sign', '--encrypt', '--armor', '-r', recipient, '-u', key])
+
+  signer.stdin.write(message)
+  signer.stdin.end()
+
+  let response = ''
+
+  signer.stdout.on('data', data => {
+    response += data.toString()
+  })
+
+  signer.stderr.on('data', data => {
+    reject(data.toString())
+  })
+
+  signer.on('exit', (code) => {
+    if (code === 0) {
+      resolve(response)
+    } else {
+      reject(response)
+    }
+  })
+})
+
+gpg.export = key => child_process.execSync(`gpg --export --armor ${key}`).toString()
+
+gpg.import = key => {
+  const importer = child_process.spawn('gpg', ['--import'])
+
+  importer.stdin.write(key)
+  importer.stdin.end()
+
+  let response = ''
+
+  importer.stdout.on('data', data => {
+    response += data.toString()
+  })
+
+  importer.stderr.on('data', data => {
+    reject(data.toString())
+  })
+
+  importer.on('exit', (code) => {
+    if (code === 0) {
+      resolve(response)
+    } else {
+      reject(response)
+    }
+  })
+
+}
 
 export const pgp = gpg
 
