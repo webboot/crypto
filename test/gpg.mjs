@@ -48,27 +48,27 @@ export default [
     info: 'gpg can parse using a function',
   },
   {
-    fn: gpg('--list-keys', { parse: true }),
+    fn: tryCatch(gpg, '--list-keys', { parse: true }),
     expect: t => is.empty(t) || is.array(Object.values(t)[0].users),
     info: 'gpg can parse keys before returning them and get the users',
   },
   {
-    fn: gpg('--list-keys && exit 1'),
+    fn: tryCatch(gpg, '--list-keys && exit 1'),
     expect: is.error,
     info: 'gpg returns an error on shell error',
   },
   {
-    fn: gpg('--list-keys && exit 1'),
+    fn: tryCatch(gpg, '--list-keys && exit 1'),
     expect: t => t.name === 'E_EXEC_ERR',
     info: 'gpg returns E_EXEC_ERR on shell error',
   },
   {
-    fn: gpg('--not-a-command-for-sure'),
+    fn: tryCatch(gpg, '--not-a-command-for-sure'),
     expect: is.error,
     info: 'gpg returns an error on shell stderr',
   },
   {
-    fn: gpg('--not-a-command-for-sure'),
+    fn: tryCatch(gpg, '--not-a-command-for-sure'),
     expect: t => t.name === 'E_EXEC_ERR',
     info: 'gpg returns E_EXEC_ERR on shell error',
   },
