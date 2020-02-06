@@ -88,7 +88,7 @@ gpg.parseKeys = string => {
 
 
 gpg.sign = async (key, recipient, message) => new Promise((resolve, reject) => {
-  const signer = child_process.spawn('gpg', ['--sign', '--encrypt', '--armor', '-r', recipient, '-u', key])
+  const signer = child_process.spawn('gpg', ['--sign', '--detach-sig', '--armor', '-u', key])
 
   signer.stdin.write(message)
   signer.stdin.end()
@@ -127,38 +127,27 @@ gpg.import = key => new Promise((resolve, reject) => {
   })
 
   importer.stderr.on('data', data => {
-    reject(data.toString())
+    const response = data.toString()
+    const exists = response.includes('not changed')
+
+    if (exists) {
+      resolve(response)
+      return
+    }
+
+    reject(response)
   })
 
   importer.on('exit', (code) => {
     if (code === 0) {
       resolve(response)
     } else {
-      reject(response)
-    }
-  })
-})
+      const exists = response.includes('not changed')
+      if (exists) {
+        resolve(response)
+        return
+      }
 
-gpg.decrypt = sig => new Promise((resolve, reject) => {
-  const decryptor = child_process.spawn('gpg', '--decrypt')
-
-  decryptor.stdin.write(sig)
-  decryptor.stdin.end()
-
-  let response = ''
-
-  decryptor.stdout.on('data', data => {
-    response += data.toString()
-  })
-
-  decryptor.stderr.on('data', data => {
-    reject(data.toString())
-  })
-
-  decryptor.on('exit', (code) => {
-    if (code === 0) {
-      resolve(response)
-    } else {
       reject(response)
     }
   })
