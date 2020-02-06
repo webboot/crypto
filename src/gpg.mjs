@@ -153,6 +153,26 @@ gpg.import = key => new Promise((resolve, reject) => {
   })
 })
 
+
+gpg.verify = ({ sig, file }) => new Promise((resolve, reject) => {
+  console.log({ sig, file })
+  const verifier = child_process.spawn('gpg', ['--verify', sig, file])
+
+  let response = ''
+
+  verifier.stderr.on('data', data => {
+    response += data.toString()
+  })
+
+  verifier.on('exit', (code) => {
+    if (code === 0) {
+      resolve(response)
+    } else {
+      reject(response)
+    }
+  })
+})
+
 export const pgp = gpg
 
 export default gpg
