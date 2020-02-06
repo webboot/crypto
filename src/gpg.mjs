@@ -165,7 +165,7 @@ gpg.verify = ({ sig, file }) => new Promise((resolve, reject) => {
   })
 
   verifier.on('exit', (code) => {
-    if (code === 0) {
+    if (code === 0 || response.includes('Good Signature')) {
       resolve(true)
     } else {
       resolve(false)
