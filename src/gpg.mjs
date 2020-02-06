@@ -114,7 +114,7 @@ gpg.sign = async (key, recipient, message) => new Promise((resolve, reject) => {
 
 gpg.export = key => child_process.execSync(`gpg --export --armor ${key}`).toString()
 
-gpg.import = key => {
+gpg.import = key => new Promise((resolve, reject) => {
   const importer = child_process.spawn('gpg', ['--import'])
 
   importer.stdin.write(key)
@@ -137,8 +137,32 @@ gpg.import = key => {
       reject(response)
     }
   })
+})
 
-}
+gpg.decrypt = sig => new Promise((resolve, reject) => {
+  const decryptor = child_process.spawn('gpg', '--decrypt')
+
+  decryptor.stdin.write(sig)
+  decryptor.stdin.end()
+
+  let response = ''
+
+  decryptor.stdout.on('data', data => {
+    response += data.toString()
+  })
+
+  decryptor.stderr.on('data', data => {
+    reject(data.toString())
+  })
+
+  decryptor.on('exit', (code) => {
+    if (code === 0) {
+      resolve(response)
+    } else {
+      reject(response)
+    }
+  })
+})
 
 export const pgp = gpg
 
