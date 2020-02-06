@@ -160,6 +160,10 @@ gpg.verify = ({ sig, file }) => new Promise((resolve, reject) => {
 
   let response = ''
 
+  verifier.stdout.on('data', data => {
+    response += data.toString()
+  })
+
   verifier.stderr.on('data', data => {
     response += data.toString()
   })
