@@ -2,6 +2,8 @@
 
 this is the @webboot/crypto library.
 
+**not audited and deployed yet. please be careful**
+
 [webboot](https://webboot.github.io) aims to make
 [tofu - trust on first use](https://en.wikipedia.org/wiki/Trust_on_first_use)
 a bit less scary.
