@@ -6,7 +6,6 @@
   "license": "AGPL-3.0",
   "description": "all cryptographic functionality used in @webboot. separated to simplify testing and auditing.",
   "main": "src/index.mjs",
-  "private": true,
   "scripts": {
     "start": "t -p",
     "test": "t",
