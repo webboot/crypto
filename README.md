@@ -144,3 +144,9 @@ being one of the default curves, it's existance can be assumed on most systems.
 
 ##### 0.0.1-alpha.0
 first release
+
+##### 0.0.1-alpha.1
+bump required node version to 14.2.0
+
+##### 0.0.1 - unreleased
+...
