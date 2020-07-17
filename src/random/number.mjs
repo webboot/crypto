@@ -22,8 +22,9 @@ export const number = async params => {
 
     if (max > Number.MAX_SAFE_INTEGER) {
       throw new Error(
-        `${libName}: Max number should be Number.MAX_SAFE_INTEGER too high by: ${max -
-          Number.MAX_SAFE_INTEGER}`,
+        `${libName}: Max number should be Number.MAX_SAFE_INTEGER too high by: ${
+          max - Number.MAX_SAFE_INTEGER
+        }`,
       )
     }
 

@@ -20,10 +20,7 @@ export const ecdh = (data, options = {}) => {
 
   const generator = crypto.createECDH(curve)
 
-  let priv = crypto
-    .createHash('sha256')
-    .update(data, 'utf8')
-    .digest()
+  let priv = crypto.createHash('sha256').update(data, 'utf8').digest()
 
   generator.setPrivateKey(priv)
 

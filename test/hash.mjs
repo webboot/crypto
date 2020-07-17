@@ -23,13 +23,21 @@ export default [
     expect: t => t.algorithm === 'sha384',
     info: 'default algorithm is sha384',
   },
-  { fn: tryCatch(crypto.hash.create, ''), expect: is.error, info: 'create: omitting the data throws' },
+  {
+    fn: tryCatch(crypto.hash.create, ''),
+    expect: is.error,
+    info: 'create: omitting the data throws',
+  },
   {
     fn: tryCatch(crypto.hash.create, ''),
     expect: t => t.name === 'E_DATA_EMPTY',
     info: 'create: omitting the data throws E_DATA_EMPTY',
   },
-  { fn: tryCatch(crypto.hash.create, 23), expect: is.error, info: 'create: omitting the data throws' },
+  {
+    fn: tryCatch(crypto.hash.create, 23),
+    expect: is.error,
+    info: 'create: omitting the data throws',
+  },
   {
     fn: tryCatch(crypto.hash.create, 23),
     expect: t => t.name === 'E_DATA_TYPE',

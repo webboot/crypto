@@ -32,7 +32,11 @@ export default [
     expect: is.undefined,
     info: '@webboot/crypto.ecdh .priv is undefined by default',
   },
-  { fn: crypto.ecdh('testing').pub, expect: is.buffer, info: '@webboot/crypto.ecdh .pub is a buffer' },
+  {
+    fn: crypto.ecdh('testing').pub,
+    expect: is.buffer,
+    info: '@webboot/crypto.ecdh .pub is a buffer',
+  },
   {
     fn: crypto.ecdh('testing', { encoding: 'base64', priv: true }).priv,
     expect: is.string,

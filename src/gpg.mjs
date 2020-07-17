@@ -86,96 +86,97 @@ gpg.parseKeys = string => {
   return keys
 }
 
+gpg.sign = async (key, recipient, message) =>
+  new Promise((resolve, reject) => {
+    const signer = child_process.spawn('gpg', ['--sign', '--detach-sig', '--armor', '-u', key])
 
-gpg.sign = async (key, recipient, message) => new Promise((resolve, reject) => {
-  const signer = child_process.spawn('gpg', ['--sign', '--detach-sig', '--armor', '-u', key])
+    signer.stdin.write(message)
+    signer.stdin.end()
 
-  signer.stdin.write(message)
-  signer.stdin.end()
+    let response = ''
 
-  let response = ''
+    signer.stdout.on('data', data => {
+      response += data.toString()
+    })
 
-  signer.stdout.on('data', data => {
-    response += data.toString()
+    signer.stderr.on('data', data => {
+      reject(data.toString())
+    })
+
+    signer.on('exit', code => {
+      if (code === 0) {
+        resolve(response)
+      } else {
+        reject(response)
+      }
+    })
   })
-
-  signer.stderr.on('data', data => {
-    reject(data.toString())
-  })
-
-  signer.on('exit', (code) => {
-    if (code === 0) {
-      resolve(response)
-    } else {
-      reject(response)
-    }
-  })
-})
 
 gpg.export = key => child_process.execSync(`gpg --export --armor ${key}`).toString()
 
-gpg.import = key => new Promise((resolve, reject) => {
-  const importer = child_process.spawn('gpg', ['--import'])
+gpg.import = key =>
+  new Promise((resolve, reject) => {
+    const importer = child_process.spawn('gpg', ['--import'])
 
-  importer.stdin.write(key)
-  importer.stdin.end()
+    importer.stdin.write(key)
+    importer.stdin.end()
 
-  let response = ''
+    let response = ''
 
-  importer.stdout.on('data', data => {
-    response += data.toString()
-  })
+    importer.stdout.on('data', data => {
+      response += data.toString()
+    })
 
-  importer.stderr.on('data', data => {
-    const response = data.toString()
-    const exists = response.includes('not changed')
-
-    if (exists) {
-      resolve(response)
-      return
-    }
-
-    reject(response)
-  })
-
-  importer.on('exit', (code) => {
-    if (code === 0) {
-      resolve(response)
-    } else {
+    importer.stderr.on('data', data => {
+      const response = data.toString()
       const exists = response.includes('not changed')
+
       if (exists) {
         resolve(response)
         return
       }
 
       reject(response)
-    }
-  })
-})
+    })
 
+    importer.on('exit', code => {
+      if (code === 0) {
+        resolve(response)
+      } else {
+        const exists = response.includes('not changed')
+        if (exists) {
+          resolve(response)
+          return
+        }
 
-gpg.verify = ({ sig, file }) => new Promise((resolve, reject) => {
-  console.log({ sig, file })
-  const verifier = child_process.spawn('gpg', ['--verify', sig, file])
-
-  let response = ''
-
-  verifier.stdout.on('data', data => {
-    response += data.toString()
-  })
-
-  verifier.stderr.on('data', data => {
-    response += data.toString()
+        reject(response)
+      }
+    })
   })
 
-  verifier.on('exit', (code) => {
-    if (code === 0 || response.includes('Good Signature')) {
-      resolve(true)
-    } else {
-      resolve(false)
-    }
+gpg.verify = ({ sig, file }) =>
+  new Promise((resolve, reject) => {
+    console.log({ sig, file })
+    const verifier = child_process.spawn('gpg', ['--verify', sig, file])
+
+    let response = ''
+
+    verifier.stdout.on('data', data => {
+      response += data.toString()
+    })
+
+    verifier.stderr.on('data', data => {
+      response += data.toString()
+    })
+
+    verifier.on('exit', code => {
+      if (code === 0 || response.includes('Good Signature')) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    })
   })
-})
 
 export const pgp = gpg
 

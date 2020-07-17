@@ -59,7 +59,8 @@ export default [
     info: 'secret works if given a public key as argument',
   },
   {
-    fn: crypto.ecdh('testing', { curve: 'secp384r1' })
+    fn: crypto
+      .ecdh('testing', { curve: 'secp384r1' })
       .secret(crypto.ecdh('testing2', { curve: 'secp384r1' }).pub)
       .toString('base64'),
     expect: expectedSecret384,
@@ -67,14 +68,13 @@ export default [
   },
 
   {
-    fn: crypto.ecdh('testing')
-      .secret(crypto.ecdh('testing2').pub)
-      .toString('base64'),
+    fn: crypto.ecdh('testing').secret(crypto.ecdh('testing2').pub).toString('base64'),
     expect: expectedSecret521,
     info: 'secret works if given a public key as argument',
   },
   {
-    fn: crypto.ecdh('testing')
+    fn: crypto
+      .ecdh('testing')
       .secret(crypto.ecdh('testing2').pub.toString('base64'))
       .toString('base64'),
     expect: expectedSecret521,
