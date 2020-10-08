@@ -20,8 +20,8 @@
   },
   "engineString": true,
   "devDependencies": {
-    "@magic/format": "0.0.12",
-    "@magic/test": "0.1.52"
+    "@magic/format": "0.0.17",
+    "@magic/test": "0.1.56"
   },
   "repository": {
     "type": "git",
