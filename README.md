@@ -44,11 +44,13 @@ additionally, this library does not have production dependencies.
   * [verify](#usage-ecdh-)
 
 ### <a name="install"></a>install
+
 ```bash
 npm install --save-exact @webboot/crypto
 ```
 
 ### <a name="usage"></a>usage
+
 ```javascript
 import crypto from '@webboot/crypto'
 
@@ -57,7 +59,9 @@ console.log(hash)
 ```
 
 ### <a name="usage-hash"></a>hash
+
 hashes a string with the specified algorithm. default algo is sha521
+
 ```javascript
 import crypto from '@webboot/crypto'
 
@@ -79,7 +83,9 @@ const options = {
 ```
 
 #### <a name="usage-ecdh-buffers"></a>buffers
-generates a ecdh pub/priv key pair.
+
+generates an ecdh pub/priv key pair.
+
 ```javascript
 import crypto from '@webboot/crypto'
 
@@ -91,8 +97,10 @@ const { curve, priv, pub } = crypto.ecdh('testing', { priv: true })
 ```
 
 #### <a name="usage-ecdh-strings"></a>strings / hex
+
 by default, `crypto.ecdh` returns buffers.
 to return base64 or hex strings, simply specifiy the encoding as such.
+
 ```javascript
 import crypto from '@webboot/crypto'
 
@@ -104,6 +112,7 @@ const { curve, priv, pub } = crypto.ecdh('testing', { encoding: 'base64', priv: 
 ```
 
 #### <a name="usage-ecdh-secret"></a>generate secrets
+
 ```
 import crypto from '@webboot/crypto'
 
@@ -129,6 +138,7 @@ console.log(bobSecret === lilithSecret) // false
 ```
 
 #### <a name="usage-ecdh-curves"></a>different curves
+
 if you want to use a different curve, just specify it.
 
 please note that secp521r1 has been chosen after careful consideration of curve options.
