@@ -6,6 +6,7 @@ export const is = {
     typeof e !== 'function' &&
     e instanceof Date !== true,
   buffer: e => e instanceof Buffer,
+  integer: e => typeof e !== 'object' && e === +e,
   empty: e => {
     if (!e) {
       return true

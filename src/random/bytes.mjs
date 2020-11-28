@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import { is } from '../lib/index.mjs'
 
 const libName = '@webboot/crypto.random.bytes'
 
@@ -8,7 +9,7 @@ export const bytes = byte =>
   new Promise((resolve, reject) => {
     byte = parseInt(byte, 10)
 
-    if (typeof byte !== 'number' || byte !== byte) {
+    if (!is.integer(byte)) {
       byte = byteDefault
     }
 
