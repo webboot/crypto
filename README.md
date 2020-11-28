@@ -151,5 +151,10 @@ bump required node version to 14.2.0
 ##### 0.0.1-alpha.2 - unreleased
 * format
 
+##### 0.0.1-alpha.3
+* update number error handling
+* fix missing production dependency of @magic/types
+* update dependencies
+
 ##### 0.0.1 - unreleased
 ...
