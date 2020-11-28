@@ -2,7 +2,7 @@
   "name": "@webboot/crypto",
   "version": "0.0.1-alpha.2",
   "author": "Wizards & Witches @ Webboot DAO",
-  "homepage": "https://webboot.github.io/crypto",
+  "homepage": "https://docs.webboot.org/crypto",
   "license": "AGPL-3.0",
   "description": "all cryptographic functionality used in @webboot. separated to simplify testing and auditing.",
   "main": "src/index.mjs",
@@ -20,8 +20,8 @@
   },
   "engineString": true,
   "devDependencies": {
-    "@magic/format": "0.0.17",
-    "@magic/test": "0.1.56"
+    "@magic/format": "0.0.19",
+    "@magic/test": "0.1.58"
   },
   "repository": {
     "type": "git",
