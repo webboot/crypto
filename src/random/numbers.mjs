@@ -1,5 +1,3 @@
-import is from '@magic/types'
-
 import number from './number.mjs'
 
 const libName = '@webboot/crypto.random.numbers'
