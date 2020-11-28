@@ -132,7 +132,7 @@ const eveSecret = eve.computeSecret(lilith.pub)
 const lilithSecret = eve.computeSecret(eve.pub)
 
 console.log(aliceSecret === bobSecret) // true
-console.llog(eveSecret === lilithSecret) // true
+console.log(eveSecret === lilithSecret) // true
 console.log(aliceSecret === eveSecret) // false
 console.log(bobSecret === lilithSecret) // false
 ```
@@ -143,7 +143,7 @@ if you want to use a different curve, just specify it.
 
 please note that secp521r1 has been chosen after careful consideration of curve options.
 
-being one of the default curves, it's existance can be assumed on most systems.
+being one of the default curves, it's existence can be assumed on most systems.
 [SP 800-186 draft](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186-draft.pdf)
 
 #### <a name="usage-keypair"></a>
