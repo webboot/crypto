@@ -1,12 +1,13 @@
 export const is = {
+  buffer: e => e instanceof Buffer,
+  function: e => typeof e === 'function',
+  integer: e => typeof e !== 'object' && e === +e,
   string: e => typeof e === 'string',
   object: e =>
     e instanceof Object &&
     !Array.isArray(e) &&
     typeof e !== 'function' &&
     e instanceof Date !== true,
-  buffer: e => e instanceof Buffer,
-  integer: e => typeof e !== 'object' && e === +e,
   empty: e => {
     if (!e) {
       return true

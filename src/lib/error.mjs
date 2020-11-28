@@ -1,5 +1,7 @@
+import is from './is.mjs'
+
 export const error = (msg, name = 'E_UNKNOWN') => {
-  if (typeof msg === 'string') {
+  if (is.string(msg)) {
     msg = new Error(msg)
   }
 

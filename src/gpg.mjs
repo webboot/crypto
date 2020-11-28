@@ -1,6 +1,7 @@
 import child_process from 'child_process'
 
 import { error } from './lib/error.mjs'
+import is from './lib/is.mjs'
 
 const libName = '@webboot/crypto.lib.gpg'
 
@@ -20,7 +21,7 @@ export const gpg = (cmd = '--list-keys', options = {}) =>
       let result = stdout.trim()
       if (options.parse === true) {
         result = gpg.parseKeys(result)
-      } else if (typeof options.parse === 'function') {
+      } else if (is.function(options.parse)) {
         result = options.parse(result)
       }
 

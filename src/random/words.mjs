@@ -1,9 +1,10 @@
+import { is } from '../lib/index.mjs'
 import { word } from './word.mjs'
 
 const libName = '@webboot/crypto.random.words'
 
 export const words = async count => {
-  if (typeof count !== 'number' || parseInt(count, 10) !== parseInt(count, 10)) {
+  if (!is.integer(count)) {
     throw new Error(`${libName} count has to be an integer.`)
   }
 

@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import { is, error } from '../lib/index.mjs'
 
 const libName = '@webboot/crypto.ecdh.secret'
@@ -11,7 +10,7 @@ export const secret = generator => (pub, options = {}) => {
   const { outputEncoding = undefined } = options
   let { inputEncoding = undefined } = options
 
-  if (typeof pub === 'string') {
+  if (is.string(pub)) {
     inputEncoding = 'base64'
   }
 
