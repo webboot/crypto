@@ -1,4 +1,4 @@
-import is from '@magic/types'
+import { is } from '@magic/test'
 
 import { bytes } from '../../src/random/index.mjs'
 
