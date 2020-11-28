@@ -5,7 +5,9 @@ import number from './number.mjs'
 const libName = '@webboot/crypto.random.numbers'
 
 export const numbers = async count => {
-  if (!is.number(count) || count < 1) {
+  count = parseInt(count, 10)
+
+  if (count !== count || count < 1) {
     throw new Error(`${libName} count: first arg has to be a positive number.`)
   }
 

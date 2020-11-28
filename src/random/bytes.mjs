@@ -8,7 +8,7 @@ export const bytes = byte =>
   new Promise((resolve, reject) => {
     byte = parseInt(byte, 10)
 
-    if (typeof byte !== 'number' || parseInt(byte) !== parseInt(byte)) {
+    if (typeof byte !== 'number' || byte !== byte) {
       byte = byteDefault
     }
 
