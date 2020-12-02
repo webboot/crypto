@@ -158,7 +158,7 @@ first release
 ##### 0.0.1-alpha.1
 bump required node version to 14.2.0
 
-##### 0.0.1-alpha.2 - unreleased
+##### 0.0.1-alpha.2
 * format
 
 ##### 0.0.1-alpha.3
